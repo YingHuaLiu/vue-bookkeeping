@@ -1,4 +1,4 @@
-# money
+# vue-bookkeeping
 
 ## Project setup
 ```
