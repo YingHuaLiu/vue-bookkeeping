@@ -3,9 +3,8 @@
     <NumberPad :value.sync="record.amount" @submit="saveRecord"/>
     <!--    <Types :value="record.type" @update:value="onUpdateTypes"/>-->
     <Types :value.sync="record.type"/>
-    <Notes @update:value="onUpdateNotes"/>
+    <Notes field-name="备注" @update:value="onUpdateNotes"/>
     <Tags :data-source.sync="tags" @update:value="onUpdateTags"/>
-    <!--sync是用于子组件修改了datasource的值可以相应修改tags的值-->
   </Layout>
 </template>
 
