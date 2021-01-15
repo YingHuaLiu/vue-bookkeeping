@@ -16,16 +16,14 @@
 </template>
 
 <script lang="ts">
-import Icon from '@/components/Icon.vue';
-
 export default {
-  name: 'Nav',
-  components: {Icon}
+  name: 'Nav'
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
+
 nav {
   @extend %outerShadow;
   display: flex;
