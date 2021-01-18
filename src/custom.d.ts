@@ -2,7 +2,7 @@ declare module '*.svg' {
   const content: String;
   export default content;
 
-};
+}
 
 type RecordItem = {
   tags: string[];
@@ -10,4 +10,21 @@ type RecordItem = {
   type: string;
   amount: number;
   createdAt?: Date;
+}
+
+type Tag = {
+  id: string;
+  name: string;
+}
+type TagListModel = {
+  data: Tag[]
+  fetch: () => Tag[]
+  create: (name: string) => 'success' | 'duplicated'
+  save: () => void
+  update: (id: string, name: string) => 'success' | 'duplicated' | 'not-found'
+  remove: (id: string) => boolean
+}
+
+interface window {
+
 }

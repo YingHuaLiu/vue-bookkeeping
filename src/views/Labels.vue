@@ -13,27 +13,21 @@
 </template>
 
 <script lang="ts">
-import tagListModel from '@/models/TagListModel';
 import Vue from 'vue';
 import {Component} from 'vue-property-decorator';
 import Button from '@/components/Button.vue';
+import store from '@/store/index2';
 
-tagListModel.fetch();
 @Component({
   components: {Button}
 })
 export default class Labels extends Vue {
-  tags = tagListModel.data;
+  tags = store.tagList;
 
   createTag() {
     const tagName = window.prompt('请输入标签名');
     if (tagName) {
-      const message = tagListModel.create(tagName);
-      if (message === 'success') {
-        window.alert('创建成功！！！');
-      } else if (message === 'duplicated') {
-        window.alert('标签名重复！！！');
-      }
+      store.createTag(tagName);
     }
   }
 }
