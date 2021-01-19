@@ -4,7 +4,7 @@
       <button @click="create">新增标签</button>
     </div>
     <ul class="currrent">
-      <li v-for="tag in dataSource" :key="tag.id"
+      <li v-for="tag in tagList" :key="tag.id"
           @click="toggle(tag)"
           :class="{selected:selectedTags.indexOf(tag)>=0}">
         {{ tag.name }}
@@ -17,9 +17,14 @@
 import Vue from 'vue';
 import {Component, Prop, Watch} from 'vue-property-decorator';
 
-@Component
+@Component({
+  computed:{
+    tagList() {
+      return []
+    }
+  }
+})
 export default class Tags extends Vue {
-  @Prop(Array) dataSource: string[] | undefined;
   selectedTags: string[] = [];
 
   toggle(tag: string) {
@@ -34,13 +39,11 @@ export default class Tags extends Vue {
 
   create() {
     const tag = window.prompt('请输入新标签名');
-    if (tag === '') {
-      window.alert('标签名不能为空');
-    } else if (this.selectedTags && (this.dataSource as string[]).indexOf(tag as string) < 0) {
-      this.$emit('update:value', [...this.dataSource as string[], tag]);
-    } else if ((this.dataSource as string[]).indexOf(tag as string) >= 0) {
-      window.alert('标签名不能重复');
+    if (!tag) {
+      return window.alert('标签名不能为空');
     }
+    //todo
+    // store.createTag(tag);
   }
 }
 </script>
