@@ -1,7 +1,10 @@
 <template>
   <label class="formItem">
     <span class="name">{{ fieldName }}</span>
-    <input type="text" :placeholder="placeHolder" :value="value" @input="onValueChanged($event.target.value)">
+    <input type="text" :placeholder="placeHolder"
+           :value="value"
+           @compositionstart="flag = false" @compositiοnend="flag = false"
+           @input="onValueChanged($event.target.value)">
   </label>
 </template>
 

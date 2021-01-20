@@ -1,4 +1,5 @@
-import {Component, Vue} from 'vue-property-decorator';
+import {Component} from 'vue-property-decorator';
+import Vue from 'vue';
 
 @Component
 export class TagHelper extends Vue {
