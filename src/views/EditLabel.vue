@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <div>
     <div class="navBar">
       <Icon class="leftIcon" @click="goBack" name="left"/>
       <span class="title">编辑标签</span>
@@ -12,7 +12,7 @@
     <div class="button-wrapper">
       <Button @click="remove">删除标签</Button>
     </div>
-  </Layout>
+  </div>
 </template>
 
 <script lang="ts">

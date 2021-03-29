@@ -9,18 +9,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
+import Vue from 'vue'
+import {Component, Prop} from 'vue-property-decorator'
 
-type dataSourceItem = { text: string; value: string }
+type dataSourceItem = {
+  text: string;
+  value: string;
+}
 @Component
 export default class Tabs extends Vue {
-  @Prop({required: true, type: Array}) dataSource!: dataSourceItem[];
-  @Prop(String) readonly value!: string;
-  @Prop(String) classPrefix?: string;
+  @Prop({required: true, type: Array}) dataSource!: dataSourceItem[]
+  @Prop(String) readonly value!: string
+  @Prop(String) classPrefix?: string
 
   select(item: dataSourceItem) {
-    this.$emit('update:value', item.value);
+    this.$emit('update:value', item.value)
   }
 }
 </script>
@@ -31,10 +34,11 @@ export default class Tabs extends Vue {
   display: flex;
   text-align: center;
   font-size: 24px;
+  height: 8vh;
 
   &-item {
     width: 50%;
-    height: 64px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

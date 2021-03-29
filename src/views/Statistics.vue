@@ -1,7 +1,6 @@
 <template>
-  <Layout>
+  <div>
     <Tabs class-prefix="type" :data-source="recordTypeList" :value.sync="type"/>
-    <!--    <Tabs class-prefix="interval" :data-source="intervalList" :value.sync="interval"/>-->
     <div>
       <ol>
         <li v-for="(group,index) in groupedList" :key="index">
@@ -16,7 +15,7 @@
         </li>
       </ol>
     </div>
-  </Layout>
+  </div>
 </template>
 
 <script lang="ts">

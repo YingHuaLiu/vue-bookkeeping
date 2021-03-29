@@ -1,6 +1,6 @@
 <template>
-  <div class="layout-wrapper" :class="classPrefix&&`${classPrefix}-wrapper`">
-    <div class="content" :class="classPrefix&&`${classPrefix}-content`">
+  <div class="layout-wrapper">
+    <div class="content">
       <slot/>
     </div>
     <Nav/>
@@ -16,14 +16,8 @@ export default {
 
 <style lang="scss" scoped>
 .layout-wrapper {
-  border: 1px solid green;
   display: flex;
   flex-direction: column;
   height: 100vh;
-}
-
-.content {
-  overflow: auto;
-  flex-grow: 1;
 }
 </style>

@@ -1,53 +1,29 @@
 <template>
-  <nav>
-    <router-link to="/money" class="item" active-class="selected">
-      <Icon name="money"/>
-      记账
-    </router-link>
-    <router-link to="/labels" class="item" active-class="selected">
-      <Icon name="label"/>
-      标签
-    </router-link>
-    <router-link to="/statistics" class="item" active-class="selected">
-      <Icon name="statistics"/>
-      统计
-    </router-link>
-  </nav>
+  <div class="nav">
+    <van-tabbar v-model="active" @change="onChange">
+      <van-tabbar-item  to="/money" name="money" icon="add-o" color="">记账</van-tabbar-item>
+      <van-tabbar-item  to="/labels" name="labels" icon="search">标签</van-tabbar-item>
+      <van-tabbar-item  to="/statistics" name="statistics" icon="chart-trending-o">统计</van-tabbar-item>
+    </van-tabbar>
+  </div>
 </template>
 
 <script lang="ts">
-export default {
-  name: 'Nav'
-};
+import Vue from 'vue'
+import {Component} from 'vue-property-decorator'
+
+@Component
+export default class Nav extends Vue {
+  active = 'money'
+
+  onChange(active: string) {
+    this.active = active
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/style/helper.scss";
-
-nav {
-  @extend %outerShadow;
-  display: flex;
-  flex-direction: row;
-  font-size: 12px;
-
-  > .item {
-    display: flex;
-    flex-direction: column;
-    width: 33.333%;
-    justify-content: center;
-    align-items: center;
-    margin: 4px 0;
-
-    .icon {
-      width: 32px;
-      height: 32px;
-    }
-  }
-
-  > .item.selected {
-    color: red;
-  }
+.van-tabbar {
+  height: 8vh;
 }
-
-
 </style>

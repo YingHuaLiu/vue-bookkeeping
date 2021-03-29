@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <div>
     <div class="tags">
       <router-link class="tag" v-for="tag in tags" :key="tag.id" :to="`/labels/edit/${tag.id}`">
         <span>{{ tag.name }}</span>
@@ -9,7 +9,7 @@
     <div class="createTag-wrapper">
       <Button class="createTag" @click.native="createTag">新建标签</Button>
     </div>
-  </Layout>
+  </div>
 </template>
 
 <script lang="ts">

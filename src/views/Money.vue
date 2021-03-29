@@ -1,65 +1,60 @@
 <template>
-  <Layout class-prefix="layout">
-    <NumberPad :value.sync="record.amount" @submit="saveRecord"/>
+  <div class="layout">
     <Tabs :data-source="recordTypeList" :value.sync="record.type"/>
-    <div class="notes">
-      <FormItem field-name="备注" place-holder="请输入备注" @update:value="onUpdateNotes"/>
-    </div>
     <Tags @update:value="onUpdateTags"/>
-  </Layout>
+    <FormItem field-name="备注" place-holder="请输入备注" @update:value="onUpdateNotes"/>
+    <NumberPad :value.sync="record.amount" @submit="saveRecord"/>
+  </div>
 </template>
 
 <script lang="ts">
-import Tags from '@/components/Money/Tags.vue';
-import FormItem from '@/components/Money/FormItem.vue';
-import NumberPad from '@/components/Money/NumberPad.vue';
-import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
-import recordTypeList from '@/constants/recordTypeList';
-import Tabs from '@/components/Tabs.vue';
+import Tags from '@/components/Money/Tags.vue'
+import FormItem from '@/components/Money/FormItem.vue'
+import NumberPad from '@/components/Money/NumberPad.vue'
+import Vue from 'vue'
+import {Component} from 'vue-property-decorator'
+import recordTypeList from '@/constants/recordTypeList'
+import Tabs from '@/components/Tabs.vue'
 
 @Component({
-  components: {Tabs, NumberPad,  FormItem, Tags}
+  components: {Tabs, NumberPad, FormItem, Tags}
 })
 export default class Money extends Vue {
   get recordList() {
-    return this.$store.state.recordList;
+    return this.$store.state.recordList
   }
 
-  recordTypeList = recordTypeList;
+  recordTypeList = recordTypeList
   record: RecordItem = {
     tags: [], notes: '', type: '-', amount: 0
-  };
+  }
 
   created() {
-    this.$store.commit('fetchRecords');
+    this.$store.commit('fetchRecords')
   }
 
   onUpdateTypes(value: string) {
-    this.record.type = value;
+    this.record.type = value
   }
 
   onUpdateNotes(value: string) {
-    this.record.notes = value;
+    this.record.notes = value
   }
 
   onUpdateTags(value: string[]) {
-    this.record.tags = value;
+    this.record.tags = value
   }
 
   saveRecord() {
-    this.$store.commit('createRecord', this.record);
+    this.$store.commit('createRecord', this.record)
   }
 }
 </script>
 
 <style lang="scss">
-.layout-content {
+.layout {
+  height: 90vh;
   display: flex;
-  flex-direction: column-reverse;
-}
-
-.notes {
-  padding: 8px 0;
+  flex-direction: column;
 }
 </style>
