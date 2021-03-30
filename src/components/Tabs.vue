@@ -1,10 +1,7 @@
 <template>
-  <ul class="tabs" :class="{[classPrefix+'-tabs']:classPrefix}">
-    <li v-for="item in dataSource" :key="item.value"
-        class="tabs-item"
-        :class="{selected:item.value===value,[classPrefix+'-tabs-item']:classPrefix}"
-        @click="select(item)">{{ item.text }}
-    </li>
+  <ul class="tabs">
+    <li @click="select('-')" :class="type==='-'?'selected':''">支出</li>
+    <li @click="select('+')" :class="type==='+'?'selected':''">收入</li>
   </ul>
 </template>
 
@@ -12,31 +9,25 @@
 import Vue from 'vue'
 import {Component, Prop} from 'vue-property-decorator'
 
-type dataSourceItem = {
-  text: string;
-  value: string;
-}
 @Component
 export default class Tabs extends Vue {
-  @Prop({required: true, type: Array}) dataSource!: dataSourceItem[]
-  @Prop(String) readonly value!: string
-  @Prop(String) classPrefix?: string
+  @Prop(String) type!: string
 
-  select(item: dataSourceItem) {
-    this.$emit('update:value', item.value)
+  select(type: string) {
+    this.$emit('updateType', type)
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .tabs {
-  background: #c4c4c4;
   display: flex;
   text-align: center;
   font-size: 24px;
   height: 8vh;
+  color: grey;
 
-  &-item {
+  li {
     width: 50%;
     height: 100%;
     display: flex;
@@ -44,14 +35,8 @@ export default class Tabs extends Vue {
     align-items: center;
     position: relative;
 
-    &.selected::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 4px;
-      left: 0;
-      bottom: 0;
-      background: #000;
+    &.selected {
+      color: black;
     }
   }
 }

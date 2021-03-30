@@ -1,6 +1,12 @@
 <template>
   <div class="numberPad">
-    <div class="output">{{ output }}</div>
+    <div class="NotesAndOutput">
+      <div class="notes">
+        <span class="notesTitle">备注:</span>
+        <input class="notesInput" type="text" placeholder="点击写备注..." :value="notes" @input="onNotesChange($event.target.value)">
+      </div>
+      <span class="output">{{ output }}</span>
+    </div>
     <div class="buttons">
       <van-button type="default" @click="inputContent">1</van-button>
       <van-button type="default" @click="inputContent">2</van-button>
@@ -29,13 +35,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {Component, Prop} from 'vue-property-decorator'
+import {Component} from 'vue-property-decorator'
 
 @Component
 export default class NumberPad extends Vue {
-  @Prop(Number) readonly value!: number
-  output = this.value.toString()
+  output = '0'
   date = this.formatDate(new Date())
+  notes = ''
   show = false
 
   formatDate(date: Date) {
@@ -43,13 +49,16 @@ export default class NumberPad extends Vue {
   }
 
   onConfirm(date: Date) {
-    console.log(date)
     this.show = false
     this.date = this.formatDate(date)
   }
 
   onCloseCalendar() {
     this.show = false
+  }
+
+  onNotesChange(notes: string) {
+    this.notes = notes
   }
 
   remove() {
@@ -66,15 +75,15 @@ export default class NumberPad extends Vue {
 
   ok() {
     const number = parseFloat(this.output)
-    this.$emit('update:value', number)
-    this.$emit('submit', number)
+    this.$emit('submit', this.notes, number, this.date)
     this.output = '0'
+    this.notes = ''
   }
 
   inputContent(event: MouseEvent) {
     const button = (event.target as HTMLButtonElement)
     const input = button.textContent! //!意思是当前属性一定不为空，这样后面就不会报错了
-    if (this.output.length === 16) {
+    if (this.output.length === 11) {
       return
     }
     if (this.output === '0') {
@@ -99,15 +108,31 @@ export default class NumberPad extends Vue {
   padding: 4px 0;
   height: 40vh;
 
-  .output {
+  .NotesAndOutput {
     font-size: 24px;
     font-family: Consolas, monospace;
-    padding: 4px 8px;
+    padding: 4px 4px;
     margin: 6px 10px;
-    text-align: right;
     background: white;
     border-radius: 8px;
     border: black 1px solid;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .notes {
+      font-size: 14px;
+      width: 55%;
+
+      .notesTitle {
+        font-weight: bold;
+      }
+
+      .notesInput {
+        border: none
+      }
+    }
   }
 
   .buttons {

@@ -1,22 +1,18 @@
 declare module '*.svg' {
-  const content: String;
-  export default content;
-
+  const content: string
+  export default content
 }
 
 type RecordItem = {
-  tags: Tag[];
+  tag: Tag;
   notes: string;
   type: string;
   amount: number;
-  createdAt?: string;
+  date?: string;
 }
 
 type Tag = {
-  id: string;
-  name: string;
-}
-
-interface window {
-
+  id: number;
+  iconName: string;
+  text: string;
 }

@@ -1,51 +1,45 @@
 <template>
   <div class="layout">
-    <Tabs :data-source="recordTypeList" :value.sync="record.type"/>
-    <Tags @update:value="onUpdateTags"/>
-    <FormItem field-name="备注" place-holder="请输入备注" @update:value="onUpdateNotes"/>
-    <NumberPad :value.sync="record.amount" @submit="saveRecord"/>
+    <div class="tabsAndTags">
+      <Tabs :type="record.type" v-on:updateType="updateType"/>
+      <Tags v-on:updateTag="updateTag"/>
+    </div>
+    <NumberPad @submit="saveRecord"/>
   </div>
 </template>
 
 <script lang="ts">
-import Tags from '@/components/Money/Tags.vue'
-import FormItem from '@/components/Money/FormItem.vue'
-import NumberPad from '@/components/Money/NumberPad.vue'
+import Tabs from '@/components/Tabs.vue'
+import Tags from '@/components/Tags.vue'
+import NumberPad from '@/components/NumberPad.vue'
 import Vue from 'vue'
 import {Component} from 'vue-property-decorator'
-import recordTypeList from '@/constants/recordTypeList'
-import Tabs from '@/components/Tabs.vue'
 
 @Component({
-  components: {Tabs, NumberPad, FormItem, Tags}
+  components: {Tabs, NumberPad, Tags}
 })
 export default class Money extends Vue {
-  get recordList() {
-    return this.$store.state.recordList
-  }
-
-  recordTypeList = recordTypeList
   record: RecordItem = {
-    tags: [], notes: '', type: '-', amount: 0
+    tag: {},
+    notes: '',
+    type: '-',
+    amount: 0,
+    date: ''
   }
 
-  created() {
-    this.$store.commit('fetchRecords')
+  updateType(type: string) {
+    this.record.type = type
   }
 
-  onUpdateTypes(value: string) {
-    this.record.type = value
+  updateTag(tag: Tag) {
+    this.record.tag = tag
   }
 
-  onUpdateNotes(value: string) {
-    this.record.notes = value
-  }
-
-  onUpdateTags(value: string[]) {
-    this.record.tags = value
-  }
-
-  saveRecord() {
+  saveRecord(notes: string, amount: number, date: Date) {
+    this.record.notes = notes
+    this.record.amount = amount
+    this.record.date = date
+    console.log(this.record)
     this.$store.commit('createRecord', this.record)
   }
 }
@@ -53,8 +47,12 @@ export default class Money extends Vue {
 
 <style lang="scss">
 .layout {
-  height: 90vh;
+  height: 92vh;
   display: flex;
   flex-direction: column;
+
+  .tabsAndTags {
+    background-image: url("../../public/img/bg.jpg");
+  }
 }
 </style>
