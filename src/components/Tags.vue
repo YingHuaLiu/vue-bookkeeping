@@ -37,7 +37,6 @@ export default class Tags extends Vue {
   padding: 0 16px 20px 16px;
   height: 44vh;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
 
@@ -64,7 +63,5 @@ export default class Tags extends Vue {
       border: 3px solid #e46f81;
     }
   }
-
-
 }
 </style>

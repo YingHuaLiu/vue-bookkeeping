@@ -1,9 +1,7 @@
 <template>
   <div class="layout">
-    <div class="tabsAndTags">
-      <Tabs :type="record.type" v-on:updateType="updateType"/>
-      <Tags :type="record.type" v-on:updateTag="updateTag"/>
-    </div>
+    <Tabs :type="record.type" v-on:updateType="updateType"/>
+    <Tags :type="record.type" v-on:updateTag="updateTag"/>
     <NumberPad @submit="saveRecord"/>
   </div>
 </template>
@@ -49,9 +47,5 @@ export default class Money extends Vue {
   height: 92vh;
   display: flex;
   flex-direction: column;
-
-  .tabsAndTags {
-    background-image: url("../../public/img/bg.jpg");
-  }
 }
 </style>

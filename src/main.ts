@@ -6,6 +6,7 @@ import store from './store'
 import Nav from '@/components/Nav.vue'
 import Icon from '@/components/Icon.vue'
 import '@/plugins/vant.ts'
+import '@/plugins/antd.ts'
 
 Vue.config.productionTip = false
 Vue.component('Nav', Nav)

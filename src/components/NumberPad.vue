@@ -3,7 +3,8 @@
     <div class="NotesAndOutput">
       <div class="notes">
         <span class="notesTitle">备注:</span>
-        <input class="notesInput" type="text" placeholder="点击写备注..." :value="notes" @input="onNotesChange($event.target.value)">
+        <input class="notesInput" type="text" placeholder="点击写备注..." :value="notes"
+               @input="onNotesChange($event.target.value)">
       </div>
       <span class="output">{{ output }}</span>
     </div>
