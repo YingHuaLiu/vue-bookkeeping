@@ -1,20 +1,22 @@
 <template>
   <ul class="tags">
-    <li v-for="(tag,index) in tagList" :key="index" @click="selectTag(tag)"
-        :class="tag.id===selectedTag.id?'selected':''">
-      <Icon :name="tag.iconName"/>
-      <a>{{ tag.text }}</a>
+    <li v-for="(tag,index) in tagList" :key="index">
+      <span v-if="tag.type===type" @click="selectTag(tag)" :class="tag.id===selectedTag.id?'selected':''">
+        <Icon :name="tag.iconName"/>
+        <a>{{ tag.text }}</a>
+      </span>
     </li>
   </ul>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import {Component} from 'vue-property-decorator'
+import {Component, Prop} from 'vue-property-decorator'
 import tagList from '@/database/tagList'
 
 @Component
 export default class Tags extends Vue {
+  @Prop(String) type: string
   tagList = tagList
   selectedTag = null
 
@@ -35,10 +37,11 @@ export default class Tags extends Vue {
   padding: 0 16px 20px 16px;
   height: 44vh;
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
 
-  li {
+  span {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -2,7 +2,7 @@
   <div class="layout">
     <div class="tabsAndTags">
       <Tabs :type="record.type" v-on:updateType="updateType"/>
-      <Tags v-on:updateTag="updateTag"/>
+      <Tags :type="record.type" v-on:updateTag="updateTag"/>
     </div>
     <NumberPad @submit="saveRecord"/>
   </div>
@@ -39,7 +39,6 @@ export default class Money extends Vue {
     this.record.notes = notes
     this.record.amount = amount
     this.record.date = date
-    console.log(this.record)
     this.$store.commit('createRecord', this.record)
   }
 }

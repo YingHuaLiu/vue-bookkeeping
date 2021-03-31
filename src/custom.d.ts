@@ -8,11 +8,12 @@ type RecordItem = {
   notes: string;
   type: string;
   amount: number;
-  date?: string;
+  date: string;
 }
 
 type Tag = {
   id: number;
+  type: string;
   iconName: string;
   text: string;
 }

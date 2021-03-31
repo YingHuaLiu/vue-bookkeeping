@@ -2,7 +2,7 @@
   <div class="nav">
     <van-tabbar v-model="active" @change="onChange">
       <van-tabbar-item  to="/money" name="money" icon="add-o">记账</van-tabbar-item>
-      <van-tabbar-item  to="/labels" name="labels" icon="search">查找</van-tabbar-item>
+      <van-tabbar-item  to="/detail" name="labels" icon="search">明细</van-tabbar-item>
       <van-tabbar-item  to="/statistics" name="statistics" icon="chart-trending-o">统计</van-tabbar-item>
     </van-tabbar>
   </div>
