@@ -1,25 +1,35 @@
 <template>
   <div class="detail">
-    <h3>收支记录</h3>
+    <!--    <a-month-picker :default-value="moment(getCurrentDate, 'YYYY-MM')" :format="'YYYY-MM'"/>-->
+    <a-month-picker v-model="time" @change="onChange">
+      <div>
+        <span class="year">{{ year }}年</span>
+        <span class="month">
+          {{ month }}月
+          <Icon name="jiantouxia"/>
+        </span>
+      </div>
+    </a-month-picker>
     <ol>
       <li class="group" v-for="(record,index) in groupedList" :key="index">
         <div class="groupTitle">
           <span>{{ record.date }} </span>
           <span>{{ record.weekday }}</span>
-          <span>收入:{{ record.income }}|支出:{{ record.expense }}</span>
+          <span>收入:{{ record.income }} | 支出:{{ record.expense }}</span>
         </div>
         <ol>
           <li v-for="item in record.items" :key="item.id">
             <van-swipe-cell>
-              <Icon :name="item.tag.iconName"/>
-              <span>{{ item.tag.text }}</span>
-              <span>{{ item.notes }}</span>
-              <span>{{ item.amount }}</span>
+              <span class="tag">
+                <Icon :name="item.tag.iconName"/>
+                <a>{{ item.tag.text }}</a>
+              </span>
+              <span class="notes">{{ item.notes }}</span>
+              <span class="amount">{{ item.type + item.amount }}</span>
               <template #right>
                 <van-button square type="danger" text="删除"/>
               </template>
             </van-swipe-cell>
-
           </li>
         </ol>
       </li>
@@ -29,8 +39,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {Component} from 'vue-property-decorator'
+import {Component, Watch} from 'vue-property-decorator'
 import dayjs from 'dayjs'
+import moment from 'moment'
 
 type  Result = {
   date: string;
@@ -58,6 +69,12 @@ const weekdayMap: stringKeyObject = {
 }
 @Component
 export default class Detail extends Vue {
+  //todo 1.删除 2.记录overflow 3.筛选日期
+  moment = moment
+  time = ''
+  year = dayjs(new Date()).format('YYYY')
+  month = dayjs(new Date()).format('MM')
+
   get recordList() {
     return (this.$store.state as RootState).recordList
   }
@@ -113,14 +130,42 @@ export default class Detail extends Vue {
   beforeCreate() {
     this.$store.commit('fetchRecord')
   }
+
+  // monthTotal(x: string, y: string) {
+  //   this.monthPay = 0
+  //   this.monthIncome = 0
+  //   const total = this.groupedList
+  //   this.selectedMonthList = total.filter(item => dayjs(item.title).format('MM') === y)
+  //   for (let i = 0; i < this.selectedMonthList.length; i++) {
+  //     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  //     this.monthPay += this.selectedMonthList[i].payTotal!
+  //     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  //     this.monthIncome += this.selectedMonthList[i].incomeTotal!
+  //   }
+  //   return ''
+  // }
+
+  onChange(date, dateString: string) {
+    console.log(date)
+    console.log(dateString)
+    this.time = new Date(dateString).toISOString()
+    this.year = dayjs(this.time).format('YYYY')
+    this.month = dayjs(this.time).format('MM')
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .detail {
   height: 92vh;
-  margin: 0 16px;
+  margin: 0 6vw;
   font-weight: bold;
+
+  .ant-calendar-picker {
+    font-size: 18px;
+    color: black;
+    margin-bottom: 2vh;
+  }
 
   .group {
     margin-bottom: 12px;
@@ -128,13 +173,47 @@ export default class Detail extends Vue {
 
     .groupTitle {
       color: grey;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
     }
 
     .van-swipe-cell {
-      border-bottom: 1px solid grey;
+      width: 100%;
+      margin-bottom: 2vw;
+      border-bottom: 1px solid #e8e8e8;
+      height: 42px;
 
-      svg {
-        font-size: 34px;
+      .tag {
+        width: 20vw;
+
+        svg {
+          border: 1px solid #717774;
+          border-radius: 50%;
+          font-size: 34px;
+          margin-right: 2vw;
+        }
+
+        a {
+          display: inline-block;
+          overflow: hidden; //超出的文本隐藏
+        }
+      }
+
+      .notes {
+        display: inline-block;
+        width: 40vw;
+        margin: 0 3vw;
+        overflow: hidden; //超出的文本隐藏
+        text-overflow: ellipsis; //溢出用省略号显示
+        white-space: nowrap; //溢出不换行
+      }
+
+      .amount {
+        display: inline-block;
+        width: 22vw;
+        text-align: right;
+        overflow: hidden; //超出的文本隐藏
       }
     }
   }
