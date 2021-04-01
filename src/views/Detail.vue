@@ -1,45 +1,50 @@
 <template>
-  <div class="detail">
-    <!--    <a-month-picker :default-value="moment(getCurrentDate, 'YYYY-MM')" :format="'YYYY-MM'"/>-->
-    <a-month-picker v-model="time" @change="onChange">
-      <div>
-        <span class="year">{{ year }}年</span>
-        <span class="month">
-          {{ month }}月
-          <Icon name="jiantouxia"/>
-        </span>
-      </div>
-    </a-month-picker>
-    <ol>
-      <li class="group" v-for="(record,index) in groupedList" :key="index">
-        <div class="groupTitle">
-          <span>{{ record.date }} </span>
-          <span>{{ record.weekday }}</span>
-          <span>收入:{{ record.income }} | 支出:{{ record.expense }}</span>
+  <div class="detail-wrapper">
+    <div class="detail">
+      <div class="detail-date-total">
+        <div class="detail-date">
+          <a-month-picker v-model="time" @change="onChange">
+            <div>
+              <span>{{ year }}年</span>
+              <span>{{ month }}月<Icon name="jiantouxia"/></span>
+            </div>
+          </a-month-picker>
         </div>
-        <ol>
-          <li v-for="item in record.items" :key="item.id">
-            <van-swipe-cell>
+        <div class="detail-total">
+          <span class="totalIncome">总收入:{{ monthIncome }} | 总支出:{{ monthExpense }}</span>
+        </div>
+      </div>
+      <ol>
+        <li class="group" v-for="(record,index) in selectedMonthList" :key="index">
+          <div class="groupTitle">
+            <span>{{ record.date }} </span>
+            <span>{{ record.weekday }}</span>
+            <span>收入:{{ record.income }} | 支出:{{ record.expense }}</span>
+          </div>
+          <ol>
+            <li v-for="item in record.items" :key="item.id">
+              <van-swipe-cell>
               <span class="tag">
                 <Icon :name="item.tag.iconName"/>
                 <a>{{ item.tag.text }}</a>
               </span>
-              <span class="notes">{{ item.notes }}</span>
-              <span class="amount">{{ item.type + item.amount }}</span>
-              <template #right>
-                <van-button square type="danger" text="删除"/>
-              </template>
-            </van-swipe-cell>
-          </li>
-        </ol>
-      </li>
-    </ol>
+                <span class="notes">{{ item.notes }}</span>
+                <span class="amount">{{ item.type + item.amount }}</span>
+                <template #right>
+                  <van-button square type="danger" text="删除"/>
+                </template>
+              </van-swipe-cell>
+            </li>
+          </ol>
+        </li>
+      </ol>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import {Component, Watch} from 'vue-property-decorator'
+import {Component} from 'vue-property-decorator'
 import dayjs from 'dayjs'
 import moment from 'moment'
 
@@ -69,11 +74,14 @@ const weekdayMap: stringKeyObject = {
 }
 @Component
 export default class Detail extends Vue {
-  //todo 1.删除 2.记录overflow 3.筛选日期
+  //todo 1.删除 3.筛选日期
   moment = moment
   time = ''
   year = dayjs(new Date()).format('YYYY')
   month = dayjs(new Date()).format('MM')
+  monthIncome = 0
+  monthExpense = 0
+  selectedMonthList: Result = []
 
   get recordList() {
     return (this.$store.state as RootState).recordList
@@ -131,33 +139,43 @@ export default class Detail extends Vue {
     this.$store.commit('fetchRecord')
   }
 
-  // monthTotal(x: string, y: string) {
-  //   this.monthPay = 0
-  //   this.monthIncome = 0
-  //   const total = this.groupedList
-  //   this.selectedMonthList = total.filter(item => dayjs(item.title).format('MM') === y)
-  //   for (let i = 0; i < this.selectedMonthList.length; i++) {
-  //     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  //     this.monthPay += this.selectedMonthList[i].payTotal!
-  //     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  //     this.monthIncome += this.selectedMonthList[i].incomeTotal!
-  //   }
-  //   return ''
-  // }
+  beforeMount() {
+    this.monthTotal()
+  }
+
+  monthTotal() {
+    this.monthExpense = 0
+    this.monthIncome = 0
+    this.selectedMonthList = this.groupedList.filter(item => dayjs(item.date).format('MM') === this.month)
+    for (let i = 0; i < this.selectedMonthList.length; i++) {
+      this.monthExpense += this.selectedMonthList[i].expense
+      this.monthIncome += this.selectedMonthList[i].income
+    }
+  }
 
   onChange(date, dateString: string) {
-    console.log(date)
-    console.log(dateString)
     this.time = new Date(dateString).toISOString()
     this.year = dayjs(this.time).format('YYYY')
     this.month = dayjs(this.time).format('MM')
+    this.monthTotal()
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.detail-wrapper {
+  overflow: auto;
+  .detail-date-total{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.ant-calendar-month-header-wrap{
+  left:50%;
+}
 .detail {
-  height: 92vh;
+  max-height: 92vh;
   margin: 0 6vw;
   font-weight: bold;
 
