@@ -1,12 +1,12 @@
 <template>
-    <ul class="tags">
-      <li v-for="(tag,index) in tagList" :key="index">
+  <ul class="tags">
+    <li v-for="(tag,index) in tagList" :key="index">
       <span v-if="tag.type===type" @click="selectTag(tag)" :class="tag.id===selectedTag.id?'selected':''">
         <Icon :name="tag.iconName"/>
         <a>{{ tag.text }}</a>
       </span>
-      </li>
-    </ul>
+    </li>
+  </ul>
 </template>
 
 <script lang="ts">
@@ -16,9 +16,9 @@ import tagList from '@/database/tagList'
 
 @Component
 export default class Tags extends Vue {
-  @Prop(String) type: string
+  @Prop(String) type: string | undefined
   tagList = tagList
-  selectedTag = null
+  selectedTag: Tag | undefined = undefined
 
   created() {
     this.selectedTag = tagList[0]

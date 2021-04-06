@@ -4,12 +4,12 @@ declare module '*.svg' {
 }
 
 type RecordItem = {
-  id: number;
-  tag: Tag;
+  id: number | undefined;
+  tag: Tag | undefined;
   notes: string;
   type: string;
   amount: number;
-  date: string;
+  date: string | undefined;
 }
 
 type Tag = {

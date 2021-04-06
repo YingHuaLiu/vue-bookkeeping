@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {Component, Watch} from 'vue-property-decorator'
+import {Component} from 'vue-property-decorator'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 import {use} from 'echarts/core'
@@ -81,7 +81,7 @@ export default class Statistics extends Vue {
         .sort((a: RecordItem, b: RecordItem) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf())
     const result: Result = [
       {
-        date: newRecordList[0].date,
+        date: newRecordList[0].date!,
         items: [newRecordList[0]],
         income: 0,
         expense: 0
@@ -94,7 +94,7 @@ export default class Statistics extends Vue {
         last.items.push(current)
       } else {
         result.push({
-          date: current.date,
+          date: current.date!,
           items: [current],
           income: 0,
           expense: 0
@@ -169,12 +169,16 @@ export default class Statistics extends Vue {
     this.selectedMonthList.forEach(dayItem => {
       dayItem.items.forEach(item => {
         if (item.type === this.type) {
-          const found: | undefined = _.find(data, {name: item.tag.text})
+          type foundObject = {
+            name?: string;
+            value?: number;
+          }
+          const found: foundObject | undefined = _.find(data, {name: item?.tag?.text})
           if (found) {
-            found.value += item.amount
+            found.value! += item.amount
           } else {
             data.push({
-              name: item.tag.text,
+              name: item?.tag?.text,
               value: item.amount
             })
           }

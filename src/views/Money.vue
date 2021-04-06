@@ -20,11 +20,11 @@ import createId from '@/lib/createId'
 export default class Money extends Vue {
   record: RecordItem = {
     id: undefined,
-    tag: {},
+    tag: undefined,
     notes: '',
     type: '-',
     amount: 0,
-    date: ''
+    date: undefined
   }
 
   updateType(type: string) {
@@ -35,7 +35,7 @@ export default class Money extends Vue {
     this.record.tag = tag
   }
 
-  saveRecord(notes: string, amount: number, date: Date) {
+  saveRecord(notes: string, amount: number, date: string) {
     this.record.id = createId()
     this.record.notes = notes
     this.record.amount = amount

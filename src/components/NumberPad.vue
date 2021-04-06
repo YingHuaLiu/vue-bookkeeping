@@ -36,7 +36,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import {Component} from 'vue-property-decorator'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
 
 @Component
 export default class NumberPad extends Vue {

@@ -98,7 +98,7 @@ export default class Detail extends Vue {
         .sort((a: RecordItem, b: RecordItem) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf())
     const result: Result = [
       {
-        date: newList[0].date,
+        date: newList[0].date!,
         weekday: weekdayMap[dayjs(newList[0].date).day()],
         items: [newList[0]],
         income: 0,
@@ -112,7 +112,7 @@ export default class Detail extends Vue {
         last.items.push(current)
       } else {
         result.push({
-          date: current.date,
+          date: current.date!,
           weekday: weekdayMap[dayjs(current.date).day()],
           items: [current],
           income: 0,
@@ -164,9 +164,7 @@ export default class Detail extends Vue {
     this.monthTotal()
   }
 
-  beforeClose({name, instance}) {
-    console.dir(name)
-    console.dir(instance)
+  beforeClose({name, instance}: Record<string, any>) {
     this.$dialog.confirm({
       message: '确定删除吗？',
     }).then(() => {
