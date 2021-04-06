@@ -3,33 +3,31 @@
     <div class="detail">
       <div class="detail-date-total">
         <div class="detail-date">
-          <a-month-picker v-model="time" @change="onChange">
-            <div>
-              <span>{{ year }}年</span>
-              <span>{{ month }}月<Icon name="jiantouxia"/></span>
-            </div>
-          </a-month-picker>
+          <Icon name="rili"/>
+          <yd-datetime v-model="time" type="month" :callback="callback" :end-date="endDate"></yd-datetime>
         </div>
         <div class="detail-total">
-          <span class="totalIncome">总收入:{{ monthIncome }} | 总支出:{{ monthExpense }}</span>
+          <span class="detail-total-left">总收入:{{ monthIncome }}元</span>
+          |
+          <span class="detail-total-right">总支出:{{ monthExpense }}元</span>
         </div>
       </div>
       <ol>
         <li class="group" v-for="(record,index) in selectedMonthList" :key="index">
           <div class="groupTitle">
-            <span>{{ record.date }} </span>
-            <span>{{ record.weekday }}</span>
-            <span>收入:{{ record.income }} | 支出:{{ record.expense }}</span>
+            <span>{{ record.date }} {{ record.weekday }}</span>
+            <span></span>
+            <span>收入:{{ record.income }}元 | 支出:{{ record.expense }}元</span>
           </div>
           <ol>
             <li v-for="item in record.items" :key="item.id">
-              <van-swipe-cell>
+              <van-swipe-cell :before-close="beforeClose" :name="item.id">
               <span class="tag">
                 <Icon :name="item.tag.iconName"/>
                 <a>{{ item.tag.text }}</a>
               </span>
                 <span class="notes">{{ item.notes }}</span>
-                <span class="amount">{{ item.type + item.amount }}</span>
+                <span class="amount">{{ item.type + item.amount }} </span>
                 <template #right>
                   <van-button square type="danger" text="删除"/>
                 </template>
@@ -38,6 +36,9 @@
           </ol>
         </li>
       </ol>
+      <div :class="[selectedMonthList.length===0?'':'ifLengthIsZero']">
+        <NullList/>
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +47,7 @@
 import Vue from 'vue'
 import {Component} from 'vue-property-decorator'
 import dayjs from 'dayjs'
-import moment from 'moment'
+import NullList from '@/components/NullList.vue'
 
 type  Result = {
   date: string;
@@ -72,13 +73,14 @@ const weekdayMap: stringKeyObject = {
   5: '星期五',
   6: '星期六'
 }
-@Component
+@Component({
+  components: {NullList}
+})
 export default class Detail extends Vue {
-  //todo 1.删除 3.筛选日期
-  moment = moment
-  time = ''
+  time = dayjs(new Date()).format('YYYY-MM-DD')
   year = dayjs(new Date()).format('YYYY')
   month = dayjs(new Date()).format('MM')
+  endDate = this.time
   monthIncome = 0
   monthExpense = 0
   selectedMonthList: Result = []
@@ -146,18 +148,33 @@ export default class Detail extends Vue {
   monthTotal() {
     this.monthExpense = 0
     this.monthIncome = 0
-    this.selectedMonthList = this.groupedList.filter(item => dayjs(item.date).format('MM') === this.month)
+    this.selectedMonthList = this.groupedList.filter(item =>
+        dayjs(item.date).format('YYYY') === this.year &&
+        dayjs(item.date).format('MM') === this.month)
     for (let i = 0; i < this.selectedMonthList.length; i++) {
       this.monthExpense += this.selectedMonthList[i].expense
       this.monthIncome += this.selectedMonthList[i].income
     }
   }
 
-  onChange(date, dateString: string) {
-    this.time = new Date(dateString).toISOString()
+  callback(time: string) {
+    this.time = time
     this.year = dayjs(this.time).format('YYYY')
     this.month = dayjs(this.time).format('MM')
     this.monthTotal()
+  }
+
+  beforeClose({name, instance}) {
+    console.dir(name)
+    console.dir(instance)
+    this.$dialog.confirm({
+      message: '确定删除吗？',
+    }).then(() => {
+      this.$store.commit('deleteRecord', name)
+      this.monthTotal()
+    }).catch(() => {
+      instance.close()
+    })
   }
 }
 </script>
@@ -165,25 +182,45 @@ export default class Detail extends Vue {
 <style lang="scss" scoped>
 .detail-wrapper {
   overflow: auto;
-  .detail-date-total{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+}
+
+.detail-date-total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2vh;
+}
+
+.detail-date {
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+
+  svg {
+    font-size: 34px;
   }
 }
-.ant-calendar-month-header-wrap{
-  left:50%;
+
+.detail-total {
+  width: 100%;
+  font-size: 16px;
+
+  .detail-total-left {
+    display: inline-block;
+    text-align: right;
+    width: 48%;
+  }
+
+  .detail-total-right {
+    display: inline-block;
+    width: 45%;
+  }
 }
+
 .detail {
   max-height: 92vh;
-  margin: 0 6vw;
+  margin: 0 4.5vw;
   font-weight: bold;
-
-  .ant-calendar-picker {
-    font-size: 18px;
-    color: black;
-    margin-bottom: 2vh;
-  }
 
   .group {
     margin-bottom: 12px;
@@ -198,7 +235,7 @@ export default class Detail extends Vue {
 
     .van-swipe-cell {
       width: 100%;
-      margin-bottom: 2vw;
+      margin-top: 2vw;
       border-bottom: 1px solid #e8e8e8;
       height: 42px;
 
@@ -208,7 +245,7 @@ export default class Detail extends Vue {
         svg {
           border: 1px solid #717774;
           border-radius: 50%;
-          font-size: 34px;
+          font-size: 32px;
           margin-right: 2vw;
         }
 
@@ -229,7 +266,7 @@ export default class Detail extends Vue {
 
       .amount {
         display: inline-block;
-        width: 22vw;
+        width: 24vw;
         text-align: right;
         overflow: hidden; //超出的文本隐藏
       }
@@ -237,5 +274,9 @@ export default class Detail extends Vue {
   }
 
 
+}
+
+.ifLengthIsZero {
+  display: none;
 }
 </style>

@@ -3,6 +3,7 @@ import VueRouter, {RouteConfig} from 'vue-router'
 import Money from '@/views/Money.vue'
 import NotFound from '@/views/NotFound.vue'
 import Detail from '@/views/Detail.vue'
+import Statistics from '@/views/Statistics.vue'
 
 Vue.use(VueRouter)
 
@@ -18,6 +19,10 @@ const routes: Array<RouteConfig> = [
   {
     path: '/detail',
     component: Detail
+  },
+  {
+    path: '/statistics',
+    component: Statistics
   },
   {
     path: '*',

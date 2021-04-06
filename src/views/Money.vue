@@ -12,12 +12,14 @@ import Tags from '@/components/Tags.vue'
 import NumberPad from '@/components/NumberPad.vue'
 import Vue from 'vue'
 import {Component} from 'vue-property-decorator'
+import createId from '@/lib/createId'
 
 @Component({
   components: {Tabs, NumberPad, Tags}
 })
 export default class Money extends Vue {
   record: RecordItem = {
+    id: undefined,
     tag: {},
     notes: '',
     type: '-',
@@ -34,6 +36,7 @@ export default class Money extends Vue {
   }
 
   saveRecord(notes: string, amount: number, date: Date) {
+    this.record.id = createId()
     this.record.notes = notes
     this.record.amount = amount
     this.record.date = date

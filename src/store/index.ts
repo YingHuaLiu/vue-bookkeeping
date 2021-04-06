@@ -24,7 +24,14 @@ const store = new Vuex.Store({
       state.recordList?.push(record2)
       store.commit('saveRecord')
     },
-
+    deleteRecord(state, id: number) {
+      for (let i = 0; i < state.recordList.length; i++) {
+        if (state.recordList[i].id === id) {
+          state.recordList.splice(i, 1);
+        }
+      }
+      store.commit('saveRecord')
+    }
   }
 })
 

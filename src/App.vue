@@ -10,7 +10,6 @@
 <style lang="scss">
 @import "~@/assets/style/reset.scss";
 @import "~@/assets/style/helper.scss";
-@import "~@/assets/style/antd.css";
 
 body {
   -webkit-font-smoothing: antialiased;

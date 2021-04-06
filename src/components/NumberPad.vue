@@ -16,47 +16,34 @@
       <van-button type="default" @click="inputContent">4</van-button>
       <van-button type="default" @click="inputContent">5</van-button>
       <van-button type="default" @click="inputContent">6</van-button>
-      <van-button type="default" @click="remove">删除</van-button>
+      <van-button type="default" @click="remove">
+        <Icon name="backspace" class="backspace"/>
+      </van-button>
       <van-button type="default" @click="inputContent">7</van-button>
       <van-button type="default" @click="inputContent">8</van-button>
       <van-button type="default" @click="inputContent">9</van-button>
       <van-button type="default" @click="clear">清空</van-button>
-      <van-button class="date" type="default" @click="show = true">
-        <van-icon name="calendar-o" size="30px"/>
-        {{ date }}
-      </van-button>
+      <yd-button class="date" type="hollow">
+        <Icon name="rili"/>
+        <yd-datetime v-model="date" type="date" start-date='1970-01-01' :end-date="endDate"></yd-datetime>
+      </yd-button>
       <van-button type="default" @click="inputContent">.</van-button>
       <van-button type="default" @click="ok" class="finish">完成</van-button>
     </div>
-
-    <van-calendar v-model="show" :min-date="new Date('2000-01-01')" :max-date="new Date('2099-12-31')"
-                  @confirm="onConfirm" @close="onCloseCalendar"/>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import {Component} from 'vue-property-decorator'
+import * as dayjs from 'dayjs'
 
 @Component
 export default class NumberPad extends Vue {
   output = '0'
-  date = this.formatDate(new Date())
+  date = dayjs(new Date()).format('YYYY-MM-DD')
+  endDate = this.date
   notes = ''
-  show = false
-
-  formatDate(date: Date) {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-  }
-
-  onConfirm(date: Date) {
-    this.show = false
-    this.date = this.formatDate(date)
-  }
-
-  onCloseCalendar() {
-    this.show = false
-  }
 
   onNotesChange(notes: string) {
     this.notes = notes
@@ -106,18 +93,17 @@ export default class NumberPad extends Vue {
 <style lang="scss" scoped>
 .numberPad {
   background: #f6d169;
-  padding: 4px 0;
+  padding: 4px 0 0 0;
   height: 40vh;
 
   .NotesAndOutput {
     font-size: 24px;
     font-family: Consolas, monospace;
     padding: 4px 4px;
-    margin: 6px 10px;
+    margin: 0 10px;
     background: white;
     border-radius: 8px;
     border: black 1px solid;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -142,7 +128,7 @@ export default class NumberPad extends Vue {
     justify-content: space-around;
     padding: 6px 4px;
 
-    > button {
+    button {
       width: 22%;
       height: 6vh;
       margin: 4px 0;
@@ -153,6 +139,18 @@ export default class NumberPad extends Vue {
 
       &.date {
         width: 47%;
+
+        .icon {
+          font-size: 22px;
+        }
+
+        .yd-datetime-input {
+          display: inline;
+        }
+      }
+
+      .backspace {
+        font-size: 30px;
       }
     }
 

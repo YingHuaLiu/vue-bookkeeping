@@ -4,6 +4,7 @@ declare module '*.svg' {
 }
 
 type RecordItem = {
+  id: number;
   tag: Tag;
   notes: string;
   type: string;
