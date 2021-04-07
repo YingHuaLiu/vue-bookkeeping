@@ -18,7 +18,7 @@ import tagList from '@/database/tagList'
 export default class Tags extends Vue {
   @Prop(String) type: string | undefined
   tagList = tagList
-  selectedTag: Tag | undefined = undefined
+  selectedTag: Tag | null = null
 
   created() {
     this.selectedTag = tagList[0]
@@ -27,7 +27,7 @@ export default class Tags extends Vue {
 
   selectTag(tag: Tag) {
     this.selectedTag = tag
-    this.$emit('updateTag', tag)
+    this.$emit('updateTag', this.selectedTag)
   }
 }
 </script>

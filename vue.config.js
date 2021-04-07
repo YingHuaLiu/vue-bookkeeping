@@ -4,10 +4,11 @@ const tsImportPluginFactory = require('ts-import-plugin');
 
 module.exports = {
   lintOnSave: false,
-  // publicPath: './',
+  publicPath: './',
   outputDir: 'dist',
-  // assetsDir: 'static',
+  assetsDir: 'static',
   // indexPath: 'index.html',
+
   chainWebpack: config => {
     // const dir = path.resolve(__dirname, 'src/assets/icons');
     // config.module.rule('svg-sprite')
